@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoodSync - Your Mood Journal</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .result-label {
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .mood-history-text {
+            height: 150px;
+            resize: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="mb-4">MoodSync - Your Mood Journal</h1>
+
+    <!-- Text entry form -->
+    <div class="form-group">
+        <label for="textEntry">Express your mood:</label>
+        <input type="text" class="form-control" id="textEntry" placeholder="Enter your mood">
+    </div>
+
+    <!-- Analyze Mood button -->
+    <button type="button" class="btn btn-primary mb-3" onclick="analyzeMood()">Analyze Mood</button>
+
+    <!-- Result label -->
+    <p class="result-label" id="resultLabel"></p>
+
+    <hr>
+
+    <!-- Mood history -->
+    <h3 class="mb-3">Mood History</h3>
+    <textarea class="form-control mood-history-text" id="moodHistory" readonly></textarea>
+</div>
+
+<script>
+    function analyzeMood() {
+        var user_input = document.getElementById("textEntry").value;
+
+        // Perform sentiment analysis using MoodDetector (you might need to call your API here)
+        // For demonstration purposes, using a simple function
+        var result_mood_breakdown = fakeMoodAnalysis(user_input);
+
+        // Display the result
+        var result_text = "Mood Breakdown:\n";
+        for (var mood in result_mood_breakdown) {
+            result_text += mood + ": " + result_mood_breakdown[mood] + "\n";
+        }
+
+        document.getElementById("resultLabel").innerText = result_text;
+
+        // Update mood history
+        var current_mood_history = document.getElementById("moodHistory").value;
+        var new_entry = "Entry: " + user_input + "\n" + result_text + "\n" + "-".repeat(30) + "\n";
+        document.getElementById("moodHistory").value = new_entry + current_mood_history;
+    }
+
+    // Fake mood analysis function (replace with actual API call)
+    function fakeMoodAnalysis(text) {
+        // This is a placeholder; replace it with your actual sentiment analysis logic
+        return {
+            "Happy": 2,
+            "Sad": 1,
+            "Neutral": 3
+        };
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

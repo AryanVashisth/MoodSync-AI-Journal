@@ -1,0 +1,57 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoodSync - Your Mood Journal</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+
+<div>
+    <h1>MoodSync - Your Mood Journal</h1>
+    
+    <label for="textEntry">Express your mood:</label>
+    <input type="text" id="textEntry" placeholder="Enter your mood">
+    
+    <button type="button" onclick="analyzeMood()">Analyze Mood</button>
+    
+    <p id="resultLabel" style="font-style: italic; font-size: 14px;"></p>
+    
+    <hr>
+    
+    <h3>Mood History</h3>
+    <textarea id="moodHistory" rows="10" cols="50" readonly></textarea>
+</div>
+
+<script>
+    function analyzeMood() {
+        var user_input = document.getElementById("textEntry").value;
+
+        $.ajax({
+            type: "POST",
+            url: "http://127.0.0.1:5000",  // Change to the actual server URL
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({text: user_input}),
+            dataType: "json",
+            success: function(response) {
+                document.getElementById("resultLabel").innerText = response.result;
+                updateMoodHistory(user_input, response.result);
+            },
+            error: function(error) {
+                console.error("Error:", error);
+            }
+        });
+    }
+
+    function updateMoodHistory(user_input, result_text) {
+        var current_mood_history = document.getElementById("moodHistory").value;
+        var new_entry = "Entry: " + user_input + "\n" + result_text + "\n" + "-".repeat(30) + "\n";
+        document.getElementById("moodHistory").value = new_entry + current_mood_history;
+    }
+</script>
+
+</body>
+</html>
